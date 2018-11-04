@@ -2,12 +2,12 @@
   ===============================
 
 
-## How to play
+## Basic Functionality
+In this game you have a Player and Enemies (bugs). The goal of the player is to reach the water, without colliding into any one of the enemies.
 
-
-* Click on each tile to see the content beneath the tile.
-* Your target is to match two same tiles at a time 
-* Ensure to match all pairs at the mininum number of moves.
+* The enemies move at varying speeds on the paved block portion of the game board
+* Once a the player collides with an enemy, the game is reset and the player moves back to the starting square
+* Once the player reaches the water (i.e., the top of the game board), the game is won
 ## Click [Memory Game App](https://danrejsa.github.io/Memory-Game/) to play the game.
 * Enjoy the game.
 
