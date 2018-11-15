@@ -1,9 +1,9 @@
 // Enemies our player must avoid
-var Enemy = function(x, y, speed) {
+var Enemy = function(i, j, speed) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-    this.x = x;
-    this.y = y;
+    this.i = i;
+    this.j = j;
     this.speed = speed;
 
     // The image/sprite for our enemies, this uses
@@ -17,24 +17,24 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x = this.x + this.speed * dt;
-    if (this.x >= 505) {
-        this.x = 0;
+    this.i = this.i + this.speed * dt;
+    if (this.i >= 505) {
+        this.i = 0;
     }
     this.checkCollision();
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.drawImage(Resources.get(this.sprite), this.i, this.j);
 };
 
 // checks en enemy's collision with player
 Enemy.prototype.checkCollision = function() {
-    if (player.y + 131 >= this.y + 90 &&
-        player.y + 73 <= this.y + 135 &&
-        player.x + 25 <= this.x + 88 &&
-        player.x + 76 >= this.x + 11) {
+    if (player.j + 131 >= this.j + 90 &&
+        player.j + 73 <= this.j + 135 &&
+        player.i + 25 <= this.i + 88 &&
+        player.i + 76 >= this.i + 11) {
         console.log('collision');
         gameReset();
     }
@@ -43,11 +43,11 @@ Enemy.prototype.checkCollision = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-var Player = function(x, y, speed) {
-    this.x = x;
-    this.y = y;
+var Player = function(i, j, speed) {
+    this.i = i;
+    this.j = j;
     this.speed = speed;
-    this.sprite = 'images/char-boy.png';
+    this.sprite = 'images/char-horn-girl.png';
 };
 
 // Update method for Player
@@ -55,7 +55,7 @@ Player.prototype.update = function() {};
 
 // renders the player
 Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.drawImage(Resources.get(this.sprite), this.i, this.j);
 };
 
 /*
@@ -63,29 +63,29 @@ Player.prototype.render = function() {
  */
 Player.prototype.handleInput = function(key) {
     if (key == 'left') {
-        this.x = (this.x - this.speed + 505) % 505;
+        this.i = (this.i - this.speed + 505) % 505;
     } else if (key == 'right') {
-        this.x = (this.x + this.speed) % 505;
+        this.i = (this.i + this.speed) % 505;
     } else if (key == 'up') {
-        this.y = (this.y - this.speed + 606) % 606;
+        this.j = (this.j - this.speed + 606) % 606;
         // going to water
-        if (this.y <= (83 - 48)) { // line 135 engine.js
+        if (this.j <= (83 - 48)) { // line 135 engine.js
             // assuming 48 to be player height
             gameOver();
             return;
         }
     } else {
-        this.y = (this.y + this.speed) % 606;
-        if (this.y > 400) { // bottom limit
-            this.y = 400;
+        this.j = (this.j + this.speed) % 606;
+        if (this.j > 400) { // bottom limit
+            this.j = 400;
         }
     }
     // x axis wrap
-    if (this.x < 2.5) {
-        this.x = 2.5;
+    if (this.i < 2.5) {
+        this.i = 2.5;
     }
-    if (this.x > 458) {
-        this.x = 458;
+    if (this.i > 458) {
+        this.i = 458;
     }
 };
 
@@ -93,8 +93,8 @@ Player.prototype.handleInput = function(key) {
  * resets the player to default position
  */
 Player.prototype.reset = function() {
-    this.x = 202.5;
-    this.y = 383;
+    this.i = 202.5;
+    this.j = 383;
 };
 
 // Now instantiate your objects.
