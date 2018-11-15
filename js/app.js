@@ -112,3 +112,38 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+// This increases enemies by score
+var score = 0;
+
+/*
+ * his resets the game in case of collision
+ */
+function gameReset() {
+    player.reset();
+    score = 0;
+    updateDisplay();
+    allEnemies = [];
+    allEnemies.push(
+        new Enemy(0, Math.random() * 150 + 50, Math.random() * 100 + 40),
+        new Enemy(0, Math.random() * 150 + 70, Math.random() * 100 + 60)
+    );
+}
+
+/*
+ * game over successfully (reached water)
+ */
+function gameOver() {
+    player.reset();
+    score += 1;
+    updateDisplay();
+    if (score % 2 == 0 && allEnemies.length < 4) {
+        allEnemies.push(new Enemy(0, Math.random() * 160 + 50, Math.random() * 90 + 70));
+    }
+}
+
+/*
+ * This updates the on screen score display
+ */
+function updateDisplay() {
+    scoreDiv.innerHTML = 'Score ' + score;
+}
