@@ -43,7 +43,7 @@ var Player = function(i, j, speed) {
     this.i = i;
     this.j = j;
     this.speed = speed;
-    this.sprite = 'images/char-boy.png';
+    this.sprite = 'images/char-horn-girl.png';
 };
 
 Player.prototype.update = function() {
