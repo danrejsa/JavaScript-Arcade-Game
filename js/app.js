@@ -1,22 +1,15 @@
-// Enemies our player must avoid
-var Enemy = function(i, j, speed) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
+// Enemies to avoid
+var Enemy = function(i, j, speed) {       
     this.i = i;
     this.j = j;
     this.speed = speed;
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
+    
+    // The image/sprite for enemies, 
     this.sprite = 'images/enemy-bug.png';
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+// This updates the enemy's position
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
     this.i = this.i + this.speed * dt;
     if (this.i >= 505) {
         this.i = 0;
@@ -24,12 +17,12 @@ Enemy.prototype.update = function(dt) {
     this.checkCollision();
 };
 
-// Draw the enemy on the screen, required method for game
+// This draws the enemy on the screen
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.i, this.j);
 };
 
-// checks en enemy's collision with player
+// This checks enemy's collision with player
 Enemy.prototype.checkCollision = function() {
     if (player.j + 131 >= this.j + 90 &&
         player.j + 73 <= this.j + 135 &&
@@ -40,9 +33,6 @@ Enemy.prototype.checkCollision = function() {
     }
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
 var Player = function(i, j, speed) {
     this.i = i;
     this.j = j;
@@ -50,17 +40,17 @@ var Player = function(i, j, speed) {
     this.sprite = 'images/char-horn-girl.png';
 };
 
-// Update method for Player
+// This updates method for Player
 Player.prototype.update = function() {};
 
-// renders the player
+// This renders the player
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.i, this.j);
 };
 
-/*
- * handles input for the player
- */
+
+ //This handles input for the player
+ 
 Player.prototype.handleInput = function(key) {
     if (key == 'left') {
         this.i = (this.i - this.speed + 505) % 505;
@@ -69,14 +59,13 @@ Player.prototype.handleInput = function(key) {
     } else if (key == 'up') {
         this.j = (this.j - this.speed + 606) % 606;
         // going to water
-        if (this.j <= (83 - 48)) { // line 135 engine.js
-            // assuming 48 to be player height
+        if (this.j <= (83 - 48)) { 
             gameOver();
             return;
         }
     } else {
         this.j = (this.j + this.speed) % 606;
-        if (this.j > 400) { // bottom limit
+        if (this.j > 400) { 
             this.j = 400;
         }
     }
@@ -89,17 +78,13 @@ Player.prototype.handleInput = function(key) {
     }
 };
 
-/*
- * resets the player to default position
- */
+ //This resets the player to default position
+ 
 Player.prototype.reset = function() {
     this.i = 202.5;
     this.j = 383;
 };
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
 var allEnemies = [];
 var player = new Player(0, 0, 50);
 var scoreDiv = document.createElement('div');
@@ -107,8 +92,8 @@ gameReset(); // setup defaults
 var canvasDiv = document.getElementsByTagName('canvas')[0];
 document.body.insertBefore(scoreDiv, canvasDiv);
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// This listens for key presses and sends the keys to
+// Player.handleInput() method. 
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
@@ -120,13 +105,11 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
-// custom
-// increase enemies by score
+// This increase enemies by score
 var score = 0;
 
-/*
- * resets the game in case of collision
- */
+ //This resets the game in case of collision
+
 function gameReset() {
     player.reset();
     score = 0;
@@ -138,9 +121,8 @@ function gameReset() {
     );
 }
 
-/*
- * game over successfully (reached water)
- */
+// game over successfully (reached water)
+
 function gameOver() {
     player.reset();
     score += 1;
@@ -150,9 +132,8 @@ function gameOver() {
     }
 }
 
-/*
- * updates the on screen score display
- */
+ //This updates the on screen score display
+
 function updateDisplay() {
     scoreDiv.innerHTML = 'Score ' + score;
 }
