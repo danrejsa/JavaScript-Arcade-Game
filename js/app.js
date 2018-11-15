@@ -105,14 +105,14 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
-// This increase enemies by score
-var score = 0;
+// This increase enemies by level
+var level = 1;
 
  //This resets the game in case of collision
 
 function gameReset() {
     player.reset();
-    score = 0;
+    level = 1;
     updateDisplay();
     allEnemies = [];
     allEnemies.push(
@@ -125,15 +125,15 @@ function gameReset() {
 
 function gameOver() {
     player.reset();
-    score += 1;
+    level += 1;
     updateDisplay();
-    if (score % 2 == 0 && allEnemies.length < 4) {
+    if (level % 2 == 0 && allEnemies.length < 4) {
         allEnemies.push(new Enemy(0, Math.random() * 160 + 50, Math.random() * 90 + 70));
     }
 }
 
- //This updates the on screen score display
+ //This updates the on screen level display
 
 function updateDisplay() {
-    scoreDiv.innerHTML = 'Score ' + score;
+    scoreDiv.innerHTML = 'Level ' + level;
 }
