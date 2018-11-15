@@ -1,107 +1,114 @@
-// Enemies to must avoid
-
-var Enemy = function(i, j, speed) {         
-    this.i = i;
-    this.j = j;
+// Enemies our player must avoid
+var Enemy = function(x, y, speed) {
+    // Variables applied to each of our instances go here,
+    // we've provided one for you to get started
+    this.x = x;
+    this.y = y;
     this.speed = speed;
- 
+
+    // The image/sprite for our enemies, this uses
+    // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
 };
 
-// This updates the enemy's position
-
+// Update the enemy's position, required method for game
+// Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.i += this.speed * dt;
-
-    // when off canvas, this resets position of enemy to move across again
-    
-    if (this.i > 550) {
-        this.i = -100;
-        this.speed = 100 + Math.floor(Math.random() * 512);
+    this.x = this.x + this.speed * dt;
+    if (this.x >= 505) {
+        this.x = 0;
     }
-
-    // This checks for collision between player and enemies
-    
-    if (player.i < this.i + 60 &&
-        player.i + 37 > this.i &&
-        player.j < this.j + 25 &&
-        30 + player.j > this.j) {
-        player.i = 200;
-        player.j = 380;
-    }
+    this.checkCollision();
 };
 
-// This draws the enemy on the screen
+// Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.i, this.j);
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-var Player = function(i, j, speed) {
-    this.i = i;
-    this.j = j;
+// checks en enemy's collision with player
+Enemy.prototype.checkCollision = function() {
+    if (player.y + 131 >= this.y + 90 &&
+        player.y + 73 <= this.y + 135 &&
+        player.x + 25 <= this.x + 88 &&
+        player.x + 76 >= this.x + 11) {
+        console.log('collision');
+        gameReset();
+    }
+};
+
+// Now write your own player class
+// This class requires an update(), render() and
+// a handleInput() method.
+var Player = function(x, y, speed) {
+    this.x = x;
+    this.y = y;
     this.speed = speed;
-    this.sprite = 'images/char-horn-girl.png';
+    this.sprite = 'images/char-boy.png';
 };
 
-Player.prototype.update = function() {
-    //This prevents player from moving beyond canvas wall boundaries
-    if (this.j > 380) {
-        this.j = 380;
-    }
+// Update method for Player
+Player.prototype.update = function() {};
 
-    if (this.i > 400) {
-        this.i = 400;
-    }
-
-    if (this.i < 0) {
-        this.i = 0;
-    }
-
-    // This checks for player reaching top of canvas and winning the game
-    if (this.j < 0) {
-        this.i = 200;
-        this.j = 380;
-    }
-};
-
+// renders the player
 Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.i, this.j);
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Player.prototype.handleInput = function(keyPress) {
-    switch (keyPress) {
-        case 'left':
-            this.i -= this.speed + 50;
-            break;
-        case 'up':
-            this.j -= this.speed + 30;
-            break;
-        case 'right':
-            this.i += this.speed + 50;
-            break;
-        case 'down':
-            this.j += this.speed + 30;
-            break;
+/*
+ * handles input for the player
+ */
+Player.prototype.handleInput = function(key) {
+    if (key == 'left') {
+        this.x = (this.x - this.speed + 505) % 505;
+    } else if (key == 'right') {
+        this.x = (this.x + this.speed) % 505;
+    } else if (key == 'up') {
+        this.y = (this.y - this.speed + 606) % 606;
+        // going to water
+        if (this.y <= (83 - 48)) { // line 135 engine.js
+            // assuming 48 to be player height
+            gameOver();
+            return;
+        }
+    } else {
+        this.y = (this.y + this.speed) % 606;
+        if (this.y > 400) { // bottom limit
+            this.y = 400;
+        }
+    }
+    // x axis wrap
+    if (this.x < 2.5) {
+        this.x = 2.5;
+    }
+    if (this.x > 458) {
+        this.x = 458;
     }
 };
 
+/*
+ * resets the player to default position
+ */
+Player.prototype.reset = function() {
+    this.x = 202.5;
+    this.y = 383;
+};
+
+// Now instantiate your objects.
+// Place all enemy objects in an array called allEnemies
+// Place the player object in a variable called player
 var allEnemies = [];
-
-// Position "y" where the enemies will are created
-var enemyPosition = [60, 140, 220];
-var player = new Player(200, 380, 50);
-var enemy;
-
-enemyPosition.forEach(function(posY) {
-    enemy = new Enemy(0, posY, 100 + Math.floor(Math.random() * 512));
-    allEnemies.push(enemy);
-});
+var player = new Player(0, 0, 50);
+var scoreDiv = document.createElement('div');
+gameReset(); // setup defaults
+var canvasDiv = document.getElementsByTagName('canvas')[0];
+document.body.insertBefore(scoreDiv, canvasDiv);
 
 // This listens for key presses and sends the keys to your
-// Player.handleInput() method.
+// Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
@@ -112,11 +119,13 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
-// This increases enemies by score
+
+// custom
+// increase enemies by score
 var score = 0;
 
 /*
- * his resets the game in case of collision
+ * resets the game in case of collision
  */
 function gameReset() {
     player.reset();
@@ -142,7 +151,7 @@ function gameOver() {
 }
 
 /*
- * This updates the on screen score display
+ * updates the on screen score display
  */
 function updateDisplay() {
     scoreDiv.innerHTML = 'Score ' + score;
