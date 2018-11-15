@@ -15,7 +15,10 @@ In this game you have a Player and Enemies (bugs). The goal of the player is to 
 * Quickly move player across the game board into the water to win.
 * Ensure not to collide with the an enemy. When that happens, the game resets and player starts from begining.
 * Enjoy the game.
-## Click [Arcade Game App](https://danrejsa.github.io/Arcade-Game/) to play the game.
+
+## How to load game.
+* Click [Arcade Game App](https://danrejsa.github.io/Arcade-Game/) to play the game.
+* Visit https://danrejsa.github.io/Arcade-Game/ OR open index.html in browser (after cloning).
 
 
 
